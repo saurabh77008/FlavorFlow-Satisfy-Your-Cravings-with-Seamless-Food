@@ -1,62 +1,79 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
-import resList from '../utils/mockData';
+import Shimmer from './Shimmer';
 
 const Body = () => {
   // * React Hook -> A normal JavaScript function which is given to us by React (or) Normal JS utility functions
   // * useState() - Super Powerful variable
   // * useEffect() -
 
-  // * State variable - Super Powerful variable
-  const [listOfRestaurants, setListOfRestaurants] = useState(resList);
+  // * State Variable - Super Powerful variable
+  const [listOfRestaurants, setListOfRestaurants] = useState([]);
+  const [filteredRestaurant, setFilteredRestaurant] = useState([]);
 
-  // * Normal JS variable
-  // const listOfRestaurants = [
-  //   {
-  //     type: 'restaurant',
-  //     data: {
-  //       id: '334475',
-  //       name: 'KFC',
-  //       cloudinaryImageId: 'bdcd233971b7c81bf77e1fa4471280eb',
-  //       cuisines: ['Burgers', 'Biryani', 'American', 'Snacks', 'Fast Food'],
-  //       costForTwo: 40000,
-  //       deliveryTime: 36,
-  //       avgRating: '3.8',
-  //     },
-  //   },
-  //   {
-  //     type: 'restaurant',
-  //     data: {
-  //       id: '334476',
-  //       name: 'Dominos',
-  //       cloudinaryImageId: 'bdcd233971b7c81bf77e1fa4471280eb',
-  //       cuisines: ['Burgers', 'Biryani', 'American', 'Snacks', 'Fast Food'],
-  //       costForTwo: 40000,
-  //       deliveryTime: 36,
-  //       avgRating: '4.8',
-  //     },
-  //   },
-  //   {
-  //     type: 'restaurant',
-  //     data: {
-  //       id: '334477',
-  //       name: 'McDonals',
-  //       cloudinaryImageId: 'bdcd233971b7c81bf77e1fa4471280eb',
-  //       cuisines: ['Burgers', 'Biryani', 'American', 'Snacks', 'Fast Food'],
-  //       costForTwo: 40000,
-  //       deliveryTime: 36,
-  //       avgRating: '4.2',
-  //     },
-  //   },
-  // ];
+  const [searchText, setSearchText] = useState('');
 
-  return (
+  // * Whenever a state variable updates or changes, react triggers a reconciliation cycle(re-renders the component)
+  console.log('Body rendered');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const data = await fetch(
+      'https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.624480699999999&page_type=DESKTOP_WEB_LISTING'
+    );
+
+    const json = await data.json();
+
+    console.log(json);
+    // * optional chaining
+    // setListOfRestaurants(json.data.cards[2].data.data.cards);
+    setListOfRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setFilteredRestaurant(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+  };
+
+  // * Conditional Rendering
+  // if (listOfRestaurants.length === 0) {
+  //   return <Shimmer />;
+  // }
+
+  return listOfRestaurants.length === 0 ? (
+    <Shimmer />
+  ) : (
     <div className="body">
       {/* <div className="search-container">
         <input type="text" placeholder="Search Food or Restaurant" />
         <button>Search</button>
       </div> */}
       <div className="filter">
+        <div className="search">
+          <input
+            type="text"
+            placeholder="Search a restaurant you want..."
+            className="searchBox"
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+          />
+          <button
+            onClick={() => {
+              // * Filter th restaurant cards and update the UI
+              // * searchText
+              console.log(searchText);
+
+              const filteredRestaurant = listOfRestaurants.filter((res) =>
+                res.data.name.toLowerCase().includes(searchText.toLowerCase())
+              );
+
+              setFilteredRestaurant(filteredRestaurant);
+            }}
+          >
+            Search
+          </button>
+        </div>
         <button
           className="filter-btn"
           onClick={() => {
@@ -75,8 +92,8 @@ const Body = () => {
       <div className="res-container">
         {/* // * looping through the <RestaurentCard /> components Using Array.map() method */}
 
-        {listOfRestaurants.map((restaurant) => (
-          <RestaurantCard key={restaurant.data.id} resData={restaurant} />
+        {filteredRestaurant.map((restaurant) => (
+          <RestaurantCard key={restaurant.info.id} resData={restaurant} />
         ))}
       </div>
     </div>
