@@ -1,39 +1,39 @@
-import { CDN_URL } from '../utils/constants';
+import { CDN_URL } from "../utils/constants";
 
-const RestaurantCard = (props) => {
-    const { resData } = props;
+const RestaurantCard = ({ data }) => {
+  let { cuisines, name, cloudinaryImageId, avgRating, sla } = data?.info;
+  let cuisine = cuisines.join(", ");
 
-    const {
-        cloudinaryImageId,
-        name,
-        cuisines,
-        avgRating,
-        costForTwo,
-        sla,
-        avgRatingString,
-    } = resData?.info;
+  if (cuisine.length > 32) {
+    cuisine = `${cuisine.substring(0, 30)}...`;
+  }
+  if (name.length > 30) {
+    name = `${name.substring(0, 25)}...`;
+  }
 
-    return (
-        <div
-            className="res-card"
-            style={{
-                backgroundColor: '#f0f0f0',
-            }}
-        >
+  return (
+    <div className="res-card">
+      <img
+        alt="res-logo"
+        className="res-logo"
+        src={`${CDN_URL}${cloudinaryImageId}`}
+      />
+      <div className="res-details">
+        <p className="res-name">{name}</p>
+        <div className="res-rating-time-div">
+          <p className="res-avg-rating">
             <img
-                className="res-logo"
-                src={CDN_URL + cloudinaryImageId}
-                alt="Biryani"
+              className="restaurant-menu-rating-icon"
+              src="https://img.icons8.com/?size=100&id=enP6M_u0BXV3&format=png&color=1D923D"
             />
-
-            <h3>{name}</h3>
-            <h4>{cuisines.join(', ')}</h4>
-            <h4>{avgRating} stars</h4>
-            <h4>    {costForTwo } </h4>
-            <h4>{sla.slaString} </h4>
-            <h5>{avgRatingString}</h5>
+            {avgRating}
+          </p>
+          <p className="res-delivery-time">{sla.slaString}</p>
         </div>
-    );
+        <p className="res-cuisine">{cuisine}</p>
+      </div>
+    </div>
+  );
 };
 
 export default RestaurantCard;
