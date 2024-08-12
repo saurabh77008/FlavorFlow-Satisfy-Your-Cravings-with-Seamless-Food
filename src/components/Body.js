@@ -1,9 +1,9 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withOffer } from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import { LOCALHOST_RESTAURANT_DATA_URL } from "../utils/constants";
-import useInternetStatus from "../Hooks/useInternetStatus";
+import useInternetStatus from "../hooks/useInternetStatus";
 
 const Body = () => {
   const [restaurantList, setRestaurantList] = useState([]);
@@ -27,14 +27,16 @@ const Body = () => {
   };
 
   const handleFilterByRating = () => {
-    let filteredList = restaurantList.filter((res) => res?.info.avgRating > 4);
+    let filteredList = restaurantList?.filter(
+      (res) => res?.info?.avgRating > 4
+    );
 
     setFilteredRestaurant(filteredList);
   };
 
   const handleSearch = () => {
-    const filteredList = restaurantList.filter((res) =>
-      res.info.name.toLowerCase().includes(searchText.toLowerCase())
+    const filteredList = restaurantList?.filter((res) =>
+      res?.info?.name?.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredRestaurant(filteredList);
   };
@@ -52,7 +54,9 @@ const Body = () => {
     );
   }
 
-  return restaurantList && restaurantList.length == 0 ? (
+  const RestaurantCardWithOffer = withOffer(RestaurantCard);
+
+  return restaurantList && restaurantList?.length == 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
@@ -79,9 +83,13 @@ const Body = () => {
           return (
             <Link
               key={restaurant.info.id}
-              to={"/restaurants/" + restaurant.info.id}
+              to={"/restaurants/" + restaurant?.info?.id}
             >
-              <RestaurantCard data={restaurant} />
+              {restaurant?.info?.aggregatedDiscountInfoV3 != undefined ? (
+                <RestaurantCardWithOffer data={restaurant} />
+              ) : (
+                <RestaurantCard data={restaurant} />
+              )}
             </Link>
           );
         })}

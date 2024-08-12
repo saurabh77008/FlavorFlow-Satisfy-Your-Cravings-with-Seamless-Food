@@ -13,10 +13,12 @@ export default class DeveloperClass extends React.Component {
       },
     };
   }
+  // 
+//https://github.com/saurabh77008?action=show&controller=profiles&tab=contributions&user_id=saurabh77008
 
   async componentDidMount() {
     try {
-      const data = await fetch("https://api.github.com/users/The-EleetCoder");
+      const data = await fetch("https://api.github.com/users/saurabh77008");
       const json = await data.json();
 
       this.setState({
@@ -70,7 +72,7 @@ export default class DeveloperClass extends React.Component {
           </div>
           <a
             className="github-elements"
-            href="https://github.com/The-EleetCoder/Namaste-React"
+            href="https://github.com/saurabh77008/FlavorFlow-Satisfy-Your-Cravings-with-Seamless-Food"
             target="_blank"
           >
             <img
