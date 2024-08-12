@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import { LOCALHOST_RESTAURANT_DATA_URL } from "../utils/constants";
-import useInternetStatus from "../hooks/useInternetStatus";
+import useInternetStatus from "../Hooks/useInternetStatus";
 
 const Body = () => {
   const [restaurantList, setRestaurantList] = useState([]);

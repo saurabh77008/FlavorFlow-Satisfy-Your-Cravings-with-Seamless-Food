@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { LOGO_URL } from "../utils/constants";
 import { useContext } from "react";
-import useInternetStatus from "../hooks/useInternetStatus";
+import useInternetStatus from "../Hooks/useInternetStatus";
 import { AppContext } from "../context/AppContext";
 import { useSelector } from "react-redux";
 
