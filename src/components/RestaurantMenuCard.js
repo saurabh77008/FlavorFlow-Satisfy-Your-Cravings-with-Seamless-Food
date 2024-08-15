@@ -45,7 +45,7 @@ const RestaurantMenuCard = ({ data }) => {
           className="restaurant-menu-card-button"
           onClick={() => handleAddClick(data)}
         >
-          ADD
+          ADD +
         </button>
       </div>
     </div>
